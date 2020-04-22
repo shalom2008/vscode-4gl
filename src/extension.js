@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 const db = require('./db');
+const outline = require('./outline');
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -15,6 +16,9 @@ function activate(context){
     vscode.languages.registerHoverProvider('4GL',{
         provideHover
     });
+
+    const disposable = vscode.languages.registerDocumentSymbolProvider({ scheme: 'file', pattern: '**/*.4gl' }, new outline.IFX4GLDocumentSymbolProvider());
+    context.subscriptions.push(disposable);
 }
 
 function provideHover(document, position, token){
